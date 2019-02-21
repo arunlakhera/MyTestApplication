@@ -6,7 +6,9 @@ import android.service.autofill.UserData;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.LinearSnapHelper;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SnapHelper;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -26,21 +28,22 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity{
 
     private List<ExamQuestionModel> m_Question_List;
     private RecyclerView m_RecyclerView_Question_List;
     private ExamQuestionAdapter m_Question_List_Adapter;
 
     private String url = "https://pikchilly.com/api/exam_question.php";
-    String m_exam_id = "exam_1";
+    private String m_exam_id = "exam_1";
 
-    StringRequest stringRequest;
-    RequestQueue requestQueue;
+    private StringRequest stringRequest;
+    private RequestQueue requestQueue;
 
     private TextView m_TextView_Question;
     private TextView m_TextView_Answer1;
@@ -50,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
 
     int currentQuestion = 0;
 
-    ExamQuestionModel examQuestion;
+    private ExamQuestionModel examQuestion;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,8 +73,11 @@ public class MainActivity extends AppCompatActivity {
 
         m_RecyclerView_Question_List.setHasFixedSize(true);
 
-        RecyclerView.LayoutManager m_Layout_Manager = new LinearLayoutManager(getApplicationContext(),LinearLayoutManager.HORIZONTAL,true);
+        RecyclerView.LayoutManager m_Layout_Manager = new LinearLayoutManager(getApplicationContext(),LinearLayoutManager.HORIZONTAL,false);
         m_RecyclerView_Question_List.setLayoutManager(m_Layout_Manager);
+
+        SnapHelper snapHelper = new LinearSnapHelper();
+        snapHelper.attachToRecyclerView(m_RecyclerView_Question_List);
 
         prepareExamListData();
 
@@ -93,13 +99,12 @@ public class MainActivity extends AppCompatActivity {
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(),"Next:" + m_Question_List.size(), Toast.LENGTH_LONG).show();
 
                 if(currentQuestion < (m_Question_List.size() - 1)){
 
                     currentQuestion = currentQuestion+1;
                     updateUI(currentQuestion);
-
+                    
                 }
 
             }
@@ -188,15 +193,17 @@ public class MainActivity extends AppCompatActivity {
 
                 JSONObject examObject = examArray.getJSONObject(i);
                 ExamQuestionModel exam = new ExamQuestionModel(String.valueOf(i + 1), examObject.getString("question_id"), examObject.getString("question_eng"), examObject.getString("answer1_eng"), examObject.getString("answer2_eng"), examObject.getString("answer3_eng"), examObject.getString("answer4_eng"));
+
                 m_Question_List.add(exam);
 
             }
 
             if(m_Question_List_Adapter == null){
-                m_Question_List_Adapter = new ExamQuestionAdapter(m_Question_List);
+                m_Question_List_Adapter = new ExamQuestionAdapter(getApplicationContext(),m_Question_List);
                 m_RecyclerView_Question_List.setAdapter(m_Question_List_Adapter);
             }else{
                 m_Question_List_Adapter.notifyDataSetChanged();
+                m_RecyclerView_Question_List.scrollToPosition(0);
             }
 
         } catch (JSONException e) {

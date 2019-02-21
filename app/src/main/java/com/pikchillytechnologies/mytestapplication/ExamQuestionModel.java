@@ -12,7 +12,6 @@ public class ExamQuestionModel {
     private String m_Answer3_Eng;
     private String m_Answer4_Eng;
 
-
     public ExamQuestionModel(String questionNumber,String question_id, String question_eng, String answer1, String answer2,String answer3,String answer4){
         this.m_Question_Number = questionNumber;
         this.m_Question_Id = question_id;
