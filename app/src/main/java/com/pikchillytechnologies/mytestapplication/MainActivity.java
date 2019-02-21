@@ -104,7 +104,7 @@ public class MainActivity extends AppCompatActivity{
 
                     currentQuestion = currentQuestion+1;
                     updateUI(currentQuestion);
-                    
+
                 }
 
             }
