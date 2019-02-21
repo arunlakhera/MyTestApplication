@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+      <android.support.v7.widget.RecyclerView
+          android:id="@+id/recyclerView_question_List"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:divider="@color/colorAccent"
+          android:scrollbars="horizontal"
+          android:layout_alignParentTop="true"
+          android:background="@android:color/darker_gray"
+          />
+
+   <LinearLayout
+       android:layout_width="match_parent"
+       android:layout_height="match_parent"
+       android:background="@color/colorPrimaryDark"
+       android:orientation="vertical"
+       android:layout_below="@id/recyclerView_question_List"
+       >
+      <TextView
+          android:id="@+id/textview_Question"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:textColor="@color/colorAccent"
+          android:text="Question"
+          android:textSize="20sp"
+          android:layout_margin="8dp"
+          />
+
+          <TextView
+              android:id="@+id/textview_Answer1"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:textColor="@color/colorAccent"
+              android:text="Answer1"
+              android:textSize="20sp"
+              android:layout_margin="8dp"
+              />
+
+          <TextView
+              android:id="@+id/textview_Answer2"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:textColor="@color/colorAccent"
+              android:text="Answer1"
+              android:textSize="20sp"
+              android:layout_margin="8dp"
+              />
+
+          <TextView
+              android:id="@+id/textview_Answer3"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:textColor="@color/colorAccent"
+              android:text="Answer1"
+              android:textSize="20sp"
+              android:layout_margin="8dp"
+              />
+
+          <TextView
+              android:id="@+id/textview_Answer4"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:textColor="@color/colorAccent"
+              android:text="Answer1"
+              android:textSize="20sp"
+              android:layout_margin="8dp"
+              />
+   </LinearLayout>
+
+    <Button
+        android:id="@+id/button_Prev"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:text="Prev"
+        />
+
+    <Button
+        android:id="@+id/button_Next"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:text="Next"
+        />
+</RelativeLayout>
