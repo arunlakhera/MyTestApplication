@@ -10,8 +10,10 @@ import android.support.v7.widget.LinearSnapHelper;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SnapHelper;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -46,12 +48,14 @@ public class MainActivity extends AppCompatActivity{
     private RequestQueue requestQueue;
 
     private TextView m_TextView_Question;
-    private TextView m_TextView_Answer1;
-    private TextView m_TextView_Answer2;
-    private TextView m_TextView_Answer3;
-    private TextView m_TextView_Answer4;
+    private CheckBox m_TextView_Answer1;
+    private CheckBox m_TextView_Answer2;
+    private CheckBox m_TextView_Answer3;
+    private CheckBox m_TextView_Answer4;
+    private Button m_Button_Hindi;
+    private Button m_Button_Eng;
 
-    int currentQuestion = 0;
+    int currentQuestion;
 
     private ExamQuestionModel examQuestion;
 
@@ -67,6 +71,8 @@ public class MainActivity extends AppCompatActivity{
         this.m_TextView_Answer2 = findViewById(R.id.textview_Answer2);
         this.m_TextView_Answer3 = findViewById(R.id.textview_Answer3);
         this.m_TextView_Answer4 = findViewById(R.id.textview_Answer4);
+        this.m_Button_Hindi = findViewById(R.id.button_Hindi);
+        this.m_Button_Eng = findViewById(R.id.button_Eng);
 
         Button next = findViewById(R.id.button_Next);
         Button prev = findViewById(R.id.button_Prev);
@@ -78,6 +84,8 @@ public class MainActivity extends AppCompatActivity{
 
         SnapHelper snapHelper = new LinearSnapHelper();
         snapHelper.attachToRecyclerView(m_RecyclerView_Question_List);
+
+        currentQuestion = 0;
 
         prepareExamListData();
 
@@ -101,10 +109,8 @@ public class MainActivity extends AppCompatActivity{
             public void onClick(View v) {
 
                 if(currentQuestion < (m_Question_List.size() - 1)){
-
                     currentQuestion = currentQuestion+1;
                     updateUI(currentQuestion);
-
                 }
 
             }
@@ -115,7 +121,6 @@ public class MainActivity extends AppCompatActivity{
             public void onClick(View v) {
 
                 if(currentQuestion > 0){
-
                     currentQuestion = currentQuestion-1;
                     updateUI(currentQuestion);
 
@@ -123,17 +128,48 @@ public class MainActivity extends AppCompatActivity{
             }
         });
 
+        m_Button_Hindi.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(examQuestion.getM_Question_Hindi().length() > 0){
+                    m_TextView_Question.setText(examQuestion.getM_Question_Hindi());
+                }else{
+                    m_TextView_Question.setText("NA");
+                }
+            }
+        });
+
+        m_Button_Eng.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(examQuestion.getM_Question_Eng().length() > 0){
+                    m_TextView_Question.setText(examQuestion.getM_Question_Eng());
+                }else{
+                    m_TextView_Question.setText("NA");
+                }
+            }
+        });
+
     }
 
-    public void updateUI(int currentQuestion){
+    public void updateUI(int curQuestion){
 
-        examQuestion = m_Question_List.get(currentQuestion);
+        examQuestion = m_Question_List.get(curQuestion);
+        m_Question_List_Adapter.row_index = curQuestion;
+
+        examQuestion.setRead(true);
+
+        m_Question_List_Adapter.notifyDataSetChanged();
+
+        Toast.makeText(getApplicationContext(),"hindi:" + examQuestion.getM_Question_Hindi(), Toast.LENGTH_LONG).show();
 
         m_TextView_Question.setText(examQuestion.getM_Question_Eng());
         m_TextView_Answer1.setText(examQuestion.getM_Answer1_Eng());
         m_TextView_Answer2.setText(examQuestion.getM_Answer2_Eng());
         m_TextView_Answer3.setText(examQuestion.getM_Answer3_Eng());
         m_TextView_Answer4.setText(examQuestion.getM_Answer4_Eng());
+
+
 
     }
 
@@ -147,6 +183,8 @@ public class MainActivity extends AppCompatActivity{
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
+
+                        //Toast.makeText(getApplicationContext(),"Response:" + response, Toast.LENGTH_LONG).show();
 
                         prepareJson(response);
                         updateUI(currentQuestion);
@@ -192,7 +230,7 @@ public class MainActivity extends AppCompatActivity{
             for (int i = 0; i < examArray.length(); i++) {
 
                 JSONObject examObject = examArray.getJSONObject(i);
-                ExamQuestionModel exam = new ExamQuestionModel(String.valueOf(i + 1), examObject.getString("question_id"), examObject.getString("question_eng"), examObject.getString("answer1_eng"), examObject.getString("answer2_eng"), examObject.getString("answer3_eng"), examObject.getString("answer4_eng"));
+                ExamQuestionModel exam = new ExamQuestionModel(String.valueOf(i + 1), examObject.getString("question_id"), examObject.getString("question_eng"), examObject.getString("question_hindi"),examObject.getString("answer1_eng"), examObject.getString("answer2_eng"), examObject.getString("answer3_eng"), examObject.getString("answer4_eng"), false);
 
                 m_Question_List.add(exam);
 

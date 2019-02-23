@@ -11,10 +11,12 @@ import android.widget.Toast;
 
 import java.util.List;
 
-public class ExamQuestionAdapter extends RecyclerView.Adapter<ExamQuestionAdapter.MyViewHolder> {
+public class ExamQuestionAdapter extends RecyclerView.Adapter<ExamQuestionAdapter.MyViewHolder>{
 
     private List<ExamQuestionModel> m_Exam_Question_List;
     private Context context;
+    private ExamQuestionModel question;
+    int row_index = -1;
 
     public ExamQuestionAdapter(Context context, List<ExamQuestionModel> examList){
         this.context = context;
@@ -30,25 +32,48 @@ public class ExamQuestionAdapter extends RecyclerView.Adapter<ExamQuestionAdapte
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final MyViewHolder holder, int position) {
 
-        ExamQuestionModel question = m_Exam_Question_List.get(position);
+        question = m_Exam_Question_List.get(position);
 
         holder.m_TextView_Question_Number.setText(question.getM_Question_Number());
         holder.m_TextView_Question_Number.setBackgroundResource(R.drawable.black_circle);
 
+        if(question.getRead()){
+            holder.m_TextView_Question_Number.setBackgroundResource(R.drawable.green_circle);
+        }else{
+            holder.m_TextView_Question_Number.setBackgroundResource(R.drawable.black_circle);
+        }
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                row_index = holder.getAdapterPosition();
+                notifyDataSetChanged();
+
+            }
+        });
+
+        // For Next/Prev Button
+          if(row_index == position){
+                holder.m_TextView_Question_Number.setBackgroundResource(R.drawable.white_circle);
+            }else{
+
+          }
+
     }
+
 
     @Override
     public int getItemCount() {
         return m_Exam_Question_List.size();
     }
 
-    public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public class MyViewHolder extends RecyclerView.ViewHolder{
 
-        private TextView m_TextView_Question_Number;
+        TextView m_TextView_Question_Number;
         private Context context;
-        ExamQuestionModel exam;
 
         public MyViewHolder(Context context, View view){
             super(view);
@@ -56,20 +81,8 @@ public class ExamQuestionAdapter extends RecyclerView.Adapter<ExamQuestionAdapte
             this.context = context;
             this.m_TextView_Question_Number = view.findViewById(R.id.textview_Question_Number);
 
-            itemView.setOnClickListener(this);
         }
 
-        @Override
-        public void onClick(View view) {
-
-            int position = getAdapterPosition();
-
-            if(position != RecyclerView.NO_POSITION){
-                 exam = m_Exam_Question_List.get(position);
-                 m_TextView_Question_Number.setBackgroundResource(R.drawable.green_circle);
-                 notifyItemChanged(position);
-            }
-        }
     }
 
 }

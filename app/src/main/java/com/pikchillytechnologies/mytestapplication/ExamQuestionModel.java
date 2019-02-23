@@ -7,19 +7,24 @@ public class ExamQuestionModel {
     private String m_Question_Number;
     private String m_Question_Id;
     private String m_Question_Eng;
+    private String m_Question_Hindi;
     private String m_Answer1_Eng;
     private String m_Answer2_Eng;
     private String m_Answer3_Eng;
     private String m_Answer4_Eng;
 
-    public ExamQuestionModel(String questionNumber,String question_id, String question_eng, String answer1, String answer2,String answer3,String answer4){
-        this.m_Question_Number = questionNumber;
+    private Boolean isRead;
+
+    public ExamQuestionModel(String question_number,String question_id, String question_eng, String question_hindi, String answer1, String answer2,String answer3,String answer4, Boolean isread){
+        this.m_Question_Number = question_number;
         this.m_Question_Id = question_id;
         this.m_Question_Eng = question_eng;
+        this.m_Question_Hindi = question_hindi;
         this.m_Answer1_Eng = answer1;
         this.m_Answer2_Eng = answer2;
         this.m_Answer3_Eng = answer3;
         this.m_Answer4_Eng = answer4;
+        this.isRead = isread;
 
     }
 
@@ -47,6 +52,13 @@ public class ExamQuestionModel {
         this.m_Question_Eng = m_Question_Eng;
     }
 
+    public String getM_Question_Hindi() {
+        return m_Question_Hindi;
+    }
+
+    public void setM_Question_Hindi(String m_Question_Hindi) {
+        this.m_Question_Hindi = m_Question_Hindi;
+    }
 
     public String getM_Answer1_Eng() {
         return m_Answer1_Eng;
@@ -80,4 +92,11 @@ public class ExamQuestionModel {
         this.m_Answer4_Eng = m_Answer4_Eng;
     }
 
+    public Boolean getRead() {
+        return isRead;
+    }
+
+    public void setRead(Boolean read) {
+        isRead = read;
+    }
 }
